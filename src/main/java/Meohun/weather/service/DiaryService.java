@@ -3,6 +3,7 @@ package Meohun.weather.service;
 import Meohun.weather.WeatherApplication;
 import Meohun.weather.domain.DateWeather;
 import Meohun.weather.domain.Diary;
+import Meohun.weather.error.InvalidDate;
 import Meohun.weather.repository.DateWeatherRepository;
 import Meohun.weather.repository.DiaryRepository;
 import org.json.simple.JSONArray;
@@ -92,7 +93,10 @@ public class DiaryService {
 
     @Transactional(readOnly = true)
     public List<Diary> readDiary(LocalDate date) {
-        logger.debug("read diary");
+        if(date.isAfter(LocalDate.ofYearDay(3050, 1))) {
+            throw new InvalidDate();
+        }
+        // logger.debug("read diary");
         return diaryRepository.findAllByDate(date);
     }
 
